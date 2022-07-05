@@ -1,0 +1,11 @@
+-- 12. Funciones PL/SQL
+SET SERVEROUTPUT ON;
+
+DECLARE
+    nombre VARCHAR2(100);
+    fecha_actual DATE := SYSDATE;
+BEGIN
+    nombre := 'Martín';
+    dbms_output.put_line(upper(substr(nombre, 1, 2)));
+    dbms_output.put_line(TO_CHAR(fecha_actual, 'dd/mm/yyyy'));
+END;
