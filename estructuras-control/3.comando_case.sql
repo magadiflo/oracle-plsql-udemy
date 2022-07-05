@@ -16,19 +16,17 @@ BEGIN
     END CASE;
 END;
 
---SEGUNDA FORMA
+--SEGUNDA FORMA: SEARCH CASE
 DECLARE 
-    v1 CHAR(1);
+    bonus NUMBER;
 BEGIN
-    v1 := 'C';
+    bonus := 100;
     
     CASE 
-        WHEN v1 = 'A' THEN DBMS_OUTPUT.PUT_LINE('Excellent');
-        WHEN v1 = 'B' THEN DBMS_OUTPUT.PUT_LINE('Very good');
-        WHEN v1 = 'C' THEN DBMS_OUTPUT.PUT_LINE('Good');
-        WHEN v1 = 'D' THEN DBMS_OUTPUT.PUT_LINE('Fair');
-        WHEN v1 = 'E' THEN DBMS_OUTPUT.PUT_LINE('Poor');
+        WHEN bonus > 500 THEN DBMS_OUTPUT.PUT_LINE('Excellent');
+        WHEN bonus <= 500 AND bonus > 250 THEN DBMS_OUTPUT.PUT_LINE('Very good');
+        WHEN bonus <= 250 AND bonus > 100 THEN DBMS_OUTPUT.PUT_LINE('Good');
     ELSE 
-        DBMS_OUTPUT.PUT_LINE('No such value');
+        DBMS_OUTPUT.PUT_LINE('POOR');
     END CASE;
 END;
