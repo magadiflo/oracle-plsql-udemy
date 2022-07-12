@@ -12,9 +12,9 @@ Arrays asociativos (INDEX BY tables)
     * Valores: Un tipo que puede ser escalar o record
     
 - Sintaxis
-TYPE nombre IS TABLE OF
-    tipo columna
-    INDEX BY PLS_INTEGER | BINARY_INTEGER | VARCHAR2(X);
+TYPE type_name IS TABLE OF 
+    { column_type [NOT NULL] | variable%TYPE [NOT NULL] | table.column%TYPE [NOT NULL] | table%ROWTYPE }
+    INDEX BY { PLS_INTEGER | BINARY_INTEGER | VARCHAR2(X) };
     
 VARIABLE TIPO;
 
