@@ -102,4 +102,103 @@ SELECT  jefe.employee_id,
 FROM employees jefe 
     LEFT JOIN departments dep ON(jefe.employee_id = dep.manager_id)
 ORDER BY departamento;
+/
 ---------------
+
+/*
+3-Crear un cursor con parámetros que pasando el número de departamento 
+visualice el número de empleados de ese departamento
+*/
+DECLARE
+    CURSOR c_empleados(num_dep departments.department_id%TYPE)
+    IS SELECT COUNT(*)
+        FROM employees
+        WHERE department_id = num_dep;
+        
+    total_empleados NUMBER;
+    num_dep departments.department_id%TYPE;
+
+BEGIN
+    num_dep := 60;
+    OPEN c_empleados(num_dep);
+    
+    FETCH c_empleados INTO total_empleados;
+    dbms_output.put_line('Dep: N° ' ||  num_dep || ', total de empleados: ' || total_empleados);
+    
+    CLOSE c_empleados;
+END;
+/
+
+SELECT * FROM departments;
+SELECT * FROM employees;
+/
+
+
+/*
+4-Crear un bucle FOR donde declaramos una subconsulta que nos devuelva el nombre 
+de los empleados cuyo JOB_ID sean ST_CLERK. 
+Es decir, no declaramos el cursor sino que lo indicamos directamente en el FOR.
+*/
+BEGIN
+    FOR i IN (SELECT first_name FROM employees WHERE job_id = 'ST_CLERK') LOOP
+        dbms_output.put_line(i.first_name);
+    END LOOP;
+END;
+/
+
+SELECT * FROM departments;
+SELECT * FROM employees WHERE job_id = 'ST_CLERK';
+/
+
+
+/*
+5-Creamos un bloque que tenga un cursor para empleados. Debemos crearlo con FOR UPDATE.
+
+Por cada fila recuperada, si el salario es mayor de 8000 incrementamos el salario un 2%
+Si es menor de 800 lo hacemos en un 3%
+Debemos modificarlo con la cláusula CURRENT OF
+Comprobar que los salarios se han modificado correctamente.
+*/
+DECLARE
+    CURSOR c_empleados
+    IS SELECT *
+        FROM employees
+    FOR UPDATE;
+        
+    v_empleado employees%ROWTYPE;
+BEGIN
+    OPEN c_empleados;
+    LOOP
+        FETCH c_empleados INTO v_empleado;
+        EXIT WHEN c_empleados%NOTFOUND;
+        
+        IF v_empleado.salary > 8000 THEN
+            UPDATE employees
+            SET salary = salary * 1.02
+            WHERE CURRENT OF c_empleados;
+        ELSIF v_empleado.salary < 800 THEN
+            UPDATE employees
+            SET salary = salary * 1.03
+            WHERE CURRENT OF c_empleados;
+        END IF;
+        
+    END LOOP;
+    CLOSE c_empleados;
+END;
+/
+SELECT * FROM employees;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
